@@ -1,0 +1,140 @@
+---
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
+import { siteContact } from '@/site-config'
+
+export const prerender = true
+
+const headings = [
+  { depth: 2, slug: 'offers', text: 'Offers' },
+  { depth: 2, slug: 'how-engagements-work', text: 'How engagements work' },
+  { depth: 2, slug: 'what-this-is-not', text: 'What this is not' },
+  { depth: 2, slug: 'start-a-conversation', text: 'Start a conversation' }
+]
+
+const offers = [
+  {
+    title: 'Agent runtime review',
+    audience: 'Teams shipping recursive or tool-using agents under real budgets.',
+    deliverable:
+      'A written audit of cell/tool/history policy, strategy binding, and ledger behaviour—with ranked risks and concrete knobs to change.',
+    href: '/blog/rlm-execution-strategies'
+  },
+  {
+    title: 'Evaluation design',
+    audience: 'Teams whose dashboards look healthy while jobs still fail.',
+    deliverable:
+      'A metric plan that pairs proxy aesthetics (tokens, cells/turn) with deliverable checks (FINAL, artefacts, stop reasons) and clear horizons.',
+    href: '/blog/rlm-small-cells'
+  },
+  {
+    title: 'GenAI platform architecture',
+    audience: 'Enterprise conversational, RAG, and multi-model platforms under audit pressure.',
+    deliverable:
+      'Architecture notes on risk vectors, HITL boundaries, operational honesty, and designs that survive operations—not only demos.',
+    href: '/about'
+  },
+  {
+    title: 'Speaking & technical writing',
+    audience: 'Conferences, internal tech talks, and architecture reviews.',
+    deliverable:
+      'Scoped sessions or notes grounded in production agent and platform work—not vendor decks.',
+    href: '/blog'
+  }
+]
+
+const contactEmail = siteContact.email?.trim()
+const mailto = contactEmail
+  ? `mailto:${contactEmail}?subject=${encodeURIComponent('Artificial Quirks · inquiry')}&body=${encodeURIComponent(
+      'System under review:\nFailure mode / question:\nSuccess criteria:\nConstraints (cost, compliance, timeline):\n'
+    )}`
+  : undefined
+---
+
+<PageLayout title='Services' {headings}>
+  <p class='lead text-muted-foreground'>
+    Advisory and review work for teams shipping agent systems and production GenAI—classical
+    engineering discipline applied where the runtime is a language model.
+  </p>
+
+  <p>
+    Writing on this site is the product of the publication. Services are optional, scoped
+    engagements for teams that want the same operational honesty applied to <em>their</em> stack.
+    Background and credentials live on <a href='/about'>About</a>.
+  </p>
+
+  <h2 id='offers'>Offers</h2>
+  <div class='not-prose my-6 grid grid-cols-1 gap-4 sm:grid-cols-2'>
+    {
+      offers.map((o) => (
+        <article class='flex flex-col rounded-xl border bg-background/60 p-5'>
+          <h3 class='text-lg font-medium text-foreground'>{o.title}</h3>
+          <p class='mt-2 text-sm text-muted-foreground'>{o.audience}</p>
+          <p class='mt-3 grow text-sm text-foreground/90'>{o.deliverable}</p>
+          <a
+            class='mt-4 text-sm font-medium text-foreground underline-offset-4 hover:underline'
+            href={o.href}
+          >
+            Related writing →
+          </a>
+        </article>
+      ))
+    }
+  </div>
+
+  <h2 id='how-engagements-work'>How engagements work</h2>
+  <ol>
+    <li>
+      <strong>Brief</strong> — You describe the system shape, what fails (or what you fear will
+      fail), and what success looks like under real constraints.
+    </li>
+    <li>
+      <strong>Scope</strong> — We agree a bounded review: runtime policy, evaluation plan, platform
+      risk, or a time-boxed advisory block—not open-ended “be our AI team.”
+    </li>
+    <li>
+      <strong>Work product</strong> — Written notes you can action: decisions, knobs, failure modes,
+      and limits. No theatre metrics without a deliverable check.
+    </li>
+  </ol>
+
+  <h2 id='what-this-is-not'>What this is not</h2>
+  <ul>
+    <li>Vendor selection sales or model-leaderboard cheerleading.</li>
+    <li>A full-time staff augmentation replacement for your platform team.</li>
+    <li>Guarantees of cost or quality without your telemetry, horizons, and stop conditions.</li>
+  </ul>
+
+  <h2 id='start-a-conversation'>Start a conversation</h2>
+  <p>
+    Prefer a short written brief over a cold pitch call. Include:
+  </p>
+  <ul>
+    <li>System under review (agent loop, RAG stack, conversational platform, …)</li>
+    <li>Failure mode or decision you need to make</li>
+    <li>Success criteria and hard constraints (budget, compliance, timeline)</li>
+  </ul>
+
+  <div class='not-prose mt-6 flex flex-wrap gap-3'>
+    {
+      mailto ? (
+        <Button title='Email a brief' href={mailto} variant='ahead' />
+      ) : (
+        <Button title='Author background' href='/about#how-to-work-together' variant='ahead' />
+      )
+    }
+    <Button title='Read the writing' href='/blog' variant='back' />
+    {
+      mailto && (
+        <Button title='Author background' href='/about' variant='back' />
+      )
+    }
+  </div>
+  {
+    contactEmail && (
+      <p class='mt-4 text-sm text-muted-foreground'>
+        Inquiries: <a href={mailto}>{contactEmail}</a>
+      </p>
+    )
+  }
+</PageLayout>

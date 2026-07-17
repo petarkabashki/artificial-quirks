@@ -8,7 +8,7 @@ export const theme: ThemeUserConfig = {
   author: 'Artificial Quirks',
   /** Description metadata for your website. Can be used in page metadata. */
   description:
-    'Industry notes on agent systems, evaluation, and production GenAI—quirks included.',
+    'Industry notes on agent systems, evaluation, and production GenAI for architects and platform leads—quirks included.',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/favicon/favicon.ico',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
@@ -43,6 +43,7 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
+      { title: 'Services', link: '/services' },
       { title: 'About', link: '/about' }
     ]
   },
@@ -76,7 +77,7 @@ export const theme: ThemeUserConfig = {
     blogPageSize: 8,
     /** Share buttons to show */
     // Currently support weibo, x, bluesky
-    share: ['weibo', 'x', 'bluesky']
+    share: ['x', 'bluesky']
     /** Enable image captions (default false) */
     // imageCaption: true
   }
@@ -86,41 +87,22 @@ export const integ: IntegrationUserConfig = {
   // [Links]
   // https://astro-pure.js.org/docs/integrations/links
   links: {
-    // Friend logbook
-    logbook: [
-      { date: '2025-03-16', content: 'Is there a leakage?' },
-      { date: '2025-03-16', content: 'A leakage of what?' },
-      { date: '2025-03-16', content: 'I have a full seat of water, like, full of water!' },
-      { date: '2025-03-16', content: 'Must be the water.' },
-      { date: '2025-03-16', content: "Let's add that to the words of wisdom." }
-    ],
-    // Yourself link info
+    logbook: [],
     applyTip: [
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://astro-pure.js.org/' },
-      { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
+      { name: 'Link', val: 'https://artificialquirks.com/' },
+      { name: 'Avatar', val: 'https://artificialquirks.com/favicon/favicon.ico' }
     ],
-    // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false
   },
   // [Search]
   pagefind: true,
-  // Add a random quote to the footer (default on homepage footer)
-  // See: https://astro-pure.js.org/docs/integrations/advanced#web-content-render
-  // [Quote]
+  // Homepage no longer renders a remote quote (avoids "Loading…" as last impression).
+  // Keep a no-op-safe stub if other templates expect integ.quote.
   quote: {
-    // - Hitokoto
-    // https://developer.hitokoto.cn/sentence/#%E8%AF%B7%E6%B1%82%E5%9C%B0%E5%9D%80
-    // server: 'https://v1.hitokoto.cn/?c=i',
-    // target: `(data) => (data.hitokoto || 'Error')`
-    // - Quotable
-    // https://github.com/lukePeavey/quotable
-    // server: 'http://api.quotable.io/quotes/random?maxLength=60',
-    // target: `(data) => data[0].content || 'Error'`
-    // - DummyJSON
-    server: 'https://dummyjson.com/quotes/random',
-    target: `(data) => (data.quote.length > 80 ? \`\${data.quote.slice(0, 80)}...\` : data.quote || 'Error')`
+    server: '',
+    target: `() => ''`
   },
   // [Typography]
   // https://unocss.dev/presets/typography
@@ -188,3 +170,11 @@ export const terms: CardListData = {
 
 const config = { ...theme, integ } as Config
 export default config
+
+/**
+ * Public inquiry address for Services CTAs.
+ * Set when ready, e.g. 'hello@artificialquirks.com'. Empty = no mailto button.
+ */
+export const siteContact = {
+  email: '' as string
+}

@@ -1,6 +1,4 @@
 ---
-import { Quote } from 'astro-pure/advanced'
-import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
@@ -13,45 +11,52 @@ import siteIntroMd from '../content/home/site-intro.md?raw'
 
 export const prerender = true
 
-const MAX_POSTS = 8
 const allPosts = await getBlogCollection()
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+const allPostsByDate = sortMDByDate(allPosts)
+const SHOW_RECENT_THRESHOLD = 6
 
 const topics = [
   {
     title: 'Agent runtimes',
-    body: 'Recursive loops, code cells, tool budgets, and the policies that keep long-horizon agents from burning the ledger.'
+    body: 'Recursive loops, code cells, tool budgets, and the policies that keep long-horizon agents from burning the ledger.',
+    href: '/tags/agents'
   },
   {
     title: 'Evaluation & honesty',
-    body: 'Measure the deliverable—not only proxy aesthetics. Pair tokens, cells/turn, and step use with FINAL and artefacts.'
+    body: 'Measure the deliverable—not only proxy aesthetics. Pair tokens, cells/turn, and step use with FINAL and artefacts.',
+    href: '/tags/eval'
   },
   {
     title: 'Strategy over model ifs',
-    body: 'Named execution strategies, profile bindings, and task overrides—without hardcoding vendor strings in the engine.'
+    body: 'Named execution strategies, profile bindings, and task overrides—without hardcoding vendor strings in the engine.',
+    href: '/blog/rlm-execution-strategies'
   },
   {
     title: 'Platform & risk',
-    body: 'Conversational GenAI, RAG, and enterprise constraints: architecture choices that survive audit and operations.'
+    body: 'Conversational GenAI, RAG, and enterprise constraints: architecture choices that survive audit and operations.',
+    href: '/services'
   }
 ]
 
-const featuredWriting = [
+const rlmSeries = [
   {
     href: '/blog/rlm-small-cells',
     title: 'When Smaller Cells Make Agents Worse',
     blurb:
-      'Prompt-only “smaller cells” improved aesthetics and missed completion under a short step budget.'
+      'Prompt-only “smaller cells” improved aesthetics and missed completion under a short step budget.',
+    part: 1
   },
   {
     href: '/blog/rlm-history-compaction',
     title: 'RLM Is Not Automatically Token-Efficient',
-    blurb: 'History policy plateaus input tokens; cheaper runs still need deliverable checks.'
+    blurb: 'History policy plateaus input tokens; cheaper runs still need deliverable checks.',
+    part: 2
   },
   {
     href: '/blog/rlm-execution-strategies',
     title: 'Strategies, Not Model Ifs',
-    blurb: 'Named YAML strategies beat model-id branches in the agent runtime.'
+    blurb: 'Named YAML strategies beat model-id branches in the agent runtime.',
+    part: 3
   }
 ]
 ---
@@ -68,15 +73,19 @@ const featuredWriting = [
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-4 text-center' id='content-header'>
       <p class='text-sm font-medium uppercase tracking-widest text-muted-foreground'>
-        artificialquirks.com
+        Industry notes · Agent systems · Production GenAI
       </p>
       <h1 class='max-w-2xl text-3xl font-medium sm:text-4xl'>{config.title}</h1>
       <p class='max-w-xl text-muted-foreground'>
         {config.description}
       </p>
+      <p class='max-w-lg text-sm text-muted-foreground'>
+        For architects and platform leads shipping agents under cost, evaluation, and operational
+        constraints—quirks included.
+      </p>
       <div class='mt-2 flex flex-wrap justify-center gap-3'>
-        <Button title='Read the blog' href='/blog' variant='ahead' />
-        <Button title='About the author' href='/about' variant='back' />
+        <Button title='Start with the RLM series' href='#current-series' variant='ahead' />
+        <Button title='Services' href='/services' variant='back' />
       </div>
     </section>
 
@@ -93,42 +102,72 @@ const featuredWriting = [
         </div>
       </Section>
 
+      <Section title='Current series' class='scroll-mt-24' id='current-series'>
+        <p class='text-sm text-muted-foreground'>
+          Recursive language-model loops: three notes on cells, history, and named strategies.
+        </p>
+        <ol class='flex flex-col gap-y-4 text-muted-foreground'>
+          {
+            rlmSeries.map((item) => (
+              <li class='flex gap-x-3'>
+                <span class='mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-medium text-foreground'>
+                  {item.part}
+                </span>
+                <div>
+                  <a class='font-medium text-foreground hover:underline' href={item.href}>
+                    {item.title}
+                  </a>
+                  <p class='text-sm'>{item.blurb}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <Button title='All posts' class='w-fit self-end' href='/blog' variant='ahead' />
+      </Section>
+
       <Section title='Topics'>
         <ul class='grid grid-cols-1 gap-4 sm:grid-cols-2'>
           {
             topics.map((t) => (
-              <li class='rounded-xl border bg-background/60 p-4'>
-                <h3 class='font-medium text-foreground'>{t.title}</h3>
-                <p class='mt-1 text-sm text-muted-foreground'>{t.body}</p>
+              <li>
+                <a
+                  href={t.href}
+                  class='block h-full rounded-xl border bg-background/60 p-4 transition-colors hover:border-foreground/25 hover:bg-background'
+                >
+                  <h3 class='font-medium text-foreground'>{t.title}</h3>
+                  <p class='mt-1 text-sm text-muted-foreground'>{t.body}</p>
+                </a>
               </li>
             ))
           }
         </ul>
       </Section>
 
-      <Section title='Featured writing'>
-        <ul class='flex flex-col gap-y-3 text-muted-foreground'>
-          {
-            featuredWriting.map((item) => (
-              <li>
-                <a class='font-medium text-foreground hover:underline' href={item.href}>
-                  {item.title}
-                </a>
-                <p class='text-sm'>{item.blurb}</p>
-              </li>
-            ))
-          }
-        </ul>
-        <Button title='All posts' class='w-fit self-end' href='/blog' variant='ahead' />
+      <Section title='Work with us'>
+        <p class='text-muted-foreground'>
+          Optional advisory: agent runtime reviews, evaluation design, and GenAI platform
+          architecture under real operational constraints.
+        </p>
+        <div class='flex flex-wrap gap-3'>
+          <Button title='View services' href='/services' variant='ahead' />
+          <Button title='About the author' href='/about' variant='back' />
+        </div>
       </Section>
 
       {
-        allPostsByDate.length > 0 && (
+        allPostsByDate.length >= SHOW_RECENT_THRESHOLD && (
           <Section title='Recent posts'>
-            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-              {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
+            <ul class='flex flex-col gap-y-3 text-muted-foreground'>
+              {allPostsByDate.slice(0, 8).map((p) => (
+                <li>
+                  <a
+                    class='font-medium text-foreground hover:underline'
+                    href={`/blog/${p.id}`}
+                  >
+                    {p.data.title}
+                  </a>
+                  <p class='text-sm'>{p.data.description}</p>
                 </li>
               ))}
             </ul>
@@ -137,6 +176,5 @@ const featuredWriting = [
         )
       }
     </div>
-    <Quote class='mt-12' />
   </main>
 </PageLayout>

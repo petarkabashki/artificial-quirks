@@ -15,6 +15,6 @@ The industry is shipping recursive loops, multi-model fleets, and “just add RA
 
 ## How to read the site
 
-Start with **Featured writing** for the current series on recursive language-model loops. Use **Blog** for the full archive. **About** is the author bio—not the product of the site.
+Start with **Current series** for the recursive language-model loop notes. Use **Blog** for the full archive. **Services** is optional advisory; **About** is credentials—not the product of the site.
 
 Claims stay labeled: observation, inference, provisional. Numbers come with horizons, stop conditions, and limits.

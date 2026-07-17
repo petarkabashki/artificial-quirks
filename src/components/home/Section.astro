@@ -1,10 +1,16 @@
 ---
 import { cn } from 'astro-pure/utils'
 
-const { class: className, title } = Astro.props
+interface Props {
+  class?: string
+  title: string
+  id?: string
+}
+
+const { class: className, title, id } = Astro.props
 ---
 
-<section class={cn('flex flex-col gap-y-5 md:flex-row md:gap-y-0', className)}>
+<section class={cn('flex flex-col gap-y-5 md:flex-row md:gap-y-0', className)} id={id}>
   <div class='text-xl font-medium md:min-w-36'>
     <h2>{title}</h2>
   </div>
