@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title">
+  <title id="title">Who vs how: profiles and strategies</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#57606a"/>
+    </marker>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="#fafbfc" rx="8"/>
+
+  <text x="380" y="28" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#1f2328">Who vs how (no model-name branches in the engine)</text>
+  <rect x="40" y="55" width="300" height="48" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="73.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">WHO — profile</text>
+  <text x="190.0" y="93.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">provider + model id</text>
+  <rect x="40" y="125" width="300" height="48" rx="8" fill="#ffffff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="143.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">optional default strategy id</text>
+  <text x="190.0" y="163.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">convenience only</text>
+  <text x="190" y="200" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" font-weight="400" fill="#656d76">binds to</text>
+  <line x1="190" y1="173" x2="190" y2="220" stroke="#57606a" stroke-width="1.75" marker-end="url(#arrow)" stroke-dasharray="5 4"/>
+  <rect x="420" y="55" width="300" height="48" rx="8" fill="#fbefff" stroke="#8250df" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="570.0" y="73.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">HOW — strategy preset</text>
+  <text x="570.0" y="93.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">named YAML policy</text>
+  <rect x="420" y="125" width="140" height="70" rx="8" fill="#ffffff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="490.0" y="154.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">cells / turn</text>
+  <text x="490.0" y="174.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">prompt style</text>
+  <rect x="580" y="125" width="140" height="70" rx="8" fill="#ffffff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="650.0" y="154.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">tool limits</text>
+  <text x="650.0" y="174.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">history caps</text>
+  <rect x="420" y="215" width="140" height="70" rx="8" fill="#ffffff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="490.0" y="244.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">hybrid phase</text>
+  <text x="490.0" y="264.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">late tighten</text>
+  <rect x="580" y="215" width="140" height="70" rx="8" fill="#ffffff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="650.0" y="244.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">prompt addon</text>
+  <text x="650.0" y="264.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">write-early etc.</text>
+  <rect x="40" y="250" width="300" height="90" rx="8" fill="#fff8c5" stroke="#bf8700" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="289.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">TASK metadata wins</text>
+  <text x="190.0" y="309.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" fill="#656d76">per-key overrides + optional strategy id</text>
+  <line x1="340" y1="295" x2="420" y2="250" stroke="#57606a" stroke-width="1.75" marker-end="url(#arrow)"/>
+  <rect x="200" y="360" width="360" height="42" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="380.0" y="381.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">Runtime resolves one strategy → seeds ledger → runs loop</text>
+  <line x1="190" y1="340" x2="380" y2="360" stroke="#57606a" stroke-width="1.75" marker-end="url(#arrow)"/>
+  <line x1="570" y1="285" x2="420" y2="360" stroke="#57606a" stroke-width="1.75" marker-end="url(#arrow)"/>
+</svg>

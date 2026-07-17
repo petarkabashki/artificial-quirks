@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" viewBox="0 0 760 380" role="img" aria-labelledby="title">
+  <title id="title">History growth vs working-set compaction</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#57606a"/>
+    </marker>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="#fafbfc" rx="8"/>
+
+  <text x="380" y="26" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#1f2328">What each model call actually receives</text>
+  <text x="190" y="55" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="700" fill="#cf222e">Unbounded history</text>
+  <rect x="50" y="70" width="280" height="28" rx="6" fill="#ddf4ff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="84.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">system + task</text>
+  <rect x="50" y="106" width="280" height="50" rx="6" fill="#ffebe9" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="131.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">turn 1 … N  (full)</text>
+  <rect x="50" y="164" width="280" height="50" rx="6" fill="#ffebe9" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="189.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">tool dumps / logs</text>
+  <rect x="50" y="222" width="280" height="28" rx="6" fill="#fff8c5" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="190.0" y="236.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">latest request</text>
+  <text x="190" y="300" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="12" font-weight="400" fill="#cf222e">input grows ~monotonically</text>
+  <text x="190" y="320" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" font-weight="400" fill="#656d76">late calls ~50–67k tokens</text>
+  <text x="570" y="55" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="700" fill="#1a7f37">Working-set policy</text>
+  <rect x="430" y="70" width="280" height="28" rx="6" fill="#ddf4ff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="570.0" y="84.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">protected prefix</text>
+  <rect x="430" y="104" width="280" height="40" rx="6" fill="#dafbe1" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="570.0" y="124.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">recent turns (full)</text>
+  <rect x="430" y="150" width="280" height="40" rx="6" fill="#fbefff" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="570.0" y="170.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">older turns (truncated)</text>
+  <rect x="430" y="196" width="280" height="28" rx="6" fill="#fff8c5" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="570.0" y="210.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">hard char ceiling</text>
+  <rect x="430" y="230" width="280" height="28" rx="6" fill="#fff8c5" stroke="#c9d1d9" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="570.0" y="244.0" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="13" font-weight="600" fill="#1f2328">latest request</text>
+  <text x="570" y="340" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="12" font-weight="400" fill="#1a7f37">plateau ~14–16k input / call</text>
+  <text x="570" y="360" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" font-weight="400" fill="#656d76">same step stop, ~2.8× fewer total tokens</text>
+  <text x="380" y="180" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" font-weight="400" fill="#656d76">apply</text>
+  <line x1="340" y1="200" x2="420" y2="200" stroke="#57606a" stroke-width="1.75" marker-end="url(#arrow)"/>
+</svg>

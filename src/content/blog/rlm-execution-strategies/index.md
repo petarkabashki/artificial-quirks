@@ -1,7 +1,7 @@
 ---
 title: "Strategies, Not Model Ifs"
-publishDate: 2026-07-17
-description: "Named YAML strategy presets beat model-id ifs: cell budgets, history caps, and hybrid phases on one object."
+publishDate: 2026-07-14
+description: "Named strategy presets beat model-id ifs: cell budgets, history caps, and hybrid phases on one object."
 tags:
   - rlm
   - architecture
@@ -13,34 +13,48 @@ language: "English"
 draft: false
 ---
 
-**Thesis.** When two models share one recursive agent loop, a single default policy will punish at least one of them. The fix is not `if "vendor" in model:` inside the engine. The fix is **named, data-driven execution strategies** (how the loop runs), optionally **bound from profiles** (who runs), and always **overridable per task**.
+If you run more than one model through the same recursive agent loop, a single default policy will usually punish at least one of them. A multi-fence model that plans in five code blocks can burn a tool budget in a few turns; a one-cell-friendly model may look “disciplined” under the same knobs and finish cleanly. The instinctive fix — `if "vendor" in model:` inside the engine — does not age well.
 
-This article records the architecture that came out of recursive-agent dogfooding on 2026-07-17: live multi-fence multi-cell burn, one-cell-friendly disciplined convergence, broken HITL extends when tool budgets were not on the ledger, and the decision to make approaches first-class YAML.
+**Claim.** Separate **who runs** (model profile) from **how the loop runs** (a named execution strategy). Encode strategies as data (YAML presets), bind them optionally from profiles, and let **task metadata win** on every key. Keep the runtime free of model-name branches.
 
-## Context: one loop, two behaviors
+This note is from live recursive-agent work in mid‑2026: multi-cell thrash on long reviews, disciplined short plans, and human-in-the-loop “extend budget” actions that did nothing because the wrong ledger row was raised. Numbers and presets below are **starting points from that dogfood**, not universal optima.
 
-| Behavior | Example from dogfood | Failure under one-size defaults |
-|----------|----------------------|----------------------------------|
-| One cell / turn, converges | single-cell-friendly model, tiny plan | Works near modest `max_tool_calls` |
-| Many cells / turn, exploratory | multi-fence model, long security review | Burns cell/tool budget in few turns; extending *root steps* does nothing |
+## What this article assumes
 
-Operators asked: *maybe different approaches are needed for different models — do we need that flexibility?*
+We talk about a **recursive language-model (RLM) loop**: the model proposes fenced **code cells**, a runtime executes them in a REPL, returns **observations**, and repeats until the model emits a terminal signal (`FINAL`), or a budget trips (steps, tools, model calls).
 
-Yes — with a constraint: **flexibility of approaches**, not special cases hardwired to vendor strings.
+![Recursive agent loop](./arch-rlm-loop.svg)
 
-Empirical companions:
+*Figure: one simplified turn. “Cell” means one executed fenced block, not a notebook metaphor only.*
 
-- [Small cells A/B](/blog/rlm-small-cells) — prompting changes cell shape; horizon still decides completion.
-- [Token / history note](/blog/rlm-history-compaction) — history caps belong on the same strategy object as cell/tool limits.
+You do not need our particular codebase to use the idea. Any agent stack with multi-turn tool use and more than one model personality hits the same design fork.
 
-## Separation of axes
+**Companion notes** in this series:
 
-| Axis | File / module | Meaning |
-|------|---------------|---------|
-| **Who** | `profiles.yaml` (profile registry) | provider + model (+ optional default strategy id) |
-| **How** | `rlm_config.yaml` (strategy registry) | iterations, tool/model caps, cells/turn, prompt style, history, addons |
+- [When smaller cells make agents worse](/blog/rlm-small-cells) — prompting changes cell shape; **horizon** still decides completion.
+- [RLM is not automatically token-efficient](/blog/rlm-history-compaction) — history caps belong on the **same** strategy object as cell and tool limits.
 
-Resolution (highest wins **per key**):
+## The problem: one loop, two behaviors
+
+| Behavior | Typical model style | Failure under one-size defaults |
+|----------|---------------------|----------------------------------|
+| One cell / turn, converges | Single-cell-friendly | Fine near modest `max_tool_calls` |
+| Many cells / turn, exploratory | Multi-fence | Burns cell/tool budget quickly; raising *root steps* alone does not help |
+
+The useful product question is not “do we need different models?” It is: **do we need different approaches** — and can we change approaches without forking the engine?
+
+## Architecture: who vs how
+
+| Axis | Config surface | Meaning |
+|------|----------------|---------|
+| **Who** | Profile registry (`profiles.yaml`) | Provider + model id (+ optional default strategy id) |
+| **How** | Strategy registry (`rlm_config.yaml`) | Iterations, tool/model caps, cells/turn, prompt style, history, addons |
+
+![Who vs how binding](./arch-strategy-binding.svg)
+
+*Figure: profiles point at strategies; tasks can override either the whole preset or individual keys. The runtime never branches on the model string.*
+
+### Resolution order (highest wins **per key**)
 
 ```text
 task.metadata[key]
@@ -51,18 +65,16 @@ task.metadata[key]
 
 ![Resolution priority](./resolution-priority.svg)
 
-*Figure: rank only — task keys always beat profile-bound presets.*
+*Figure: rank only — a task key always beats a profile-bound preset for that key.*
 
 ### Why not model `if`s
 
-1. **New models appear weekly.** Engine forks rot.
-2. **Same model, different jobs.** A short probe wants multi-block batching; a long review wants hybrid discipline ([A/B note](/blog/rlm-small-cells)).
-3. **Tests and evals** need pure strategy diffs without swapping weights.
-4. **Operators** can add presets without shipping Python.
+1. **New models appear constantly.** Engine forks rot.
+2. **Same model, different jobs.** A short probe may want multi-block batching; a long review may want hybrid late discipline ([cell A/B](/blog/rlm-small-cells)).
+3. **Evals need pure strategy diffs** without swapping weights.
+4. **Operators** should add presets without shipping Python.
 
-## Named presets (shipped shape)
-
-From `rlm_config.yaml` (abridged intent):
+## Named presets (illustrative shape)
 
 | Preset | Intent | Typical binding |
 |--------|--------|-----------------|
@@ -72,12 +84,10 @@ From `rlm_config.yaml` (abridged intent):
 
 ![Preset budget comparison](./preset-budgets.svg)
 
-*Figure: `max_cells/turn` of 0 means **no hard cap** (`null` in YAML) for `default`.*
-
-Illustrative YAML:
+*Figure: `max_cells/turn` of 0 means **no hard cap** (`null` in config) for `default`.*
 
 ```yaml
-# rlm_config.yaml
+# rlm_config.yaml (abridged)
 configs:
   default:
     max_tool_calls: 200
@@ -100,7 +110,7 @@ configs:
     late_max_code_blocks_per_turn: 4
     prompt_style: multi_block_budgeted
     system_prompt_addon: >-
-      Prefer batched reads; write findings early under /workspace/reviews/;
+      Prefer batched reads; write findings early under a reviews path;
       after orientation, fewer smaller cells and FINAL soon.
 ```
 
@@ -123,63 +133,63 @@ Task authors still win:
 agent:
   profile: multi-fence-model
 metadata:
-  rlm_config_id: disciplined   # force different approach
+  rlm_config_id: disciplined   # force a different approach
   max_tool_calls: 500          # one-off key override
 ```
 
-## Strategy knobs that earned their place
+## Knobs that earned a place
 
-| Knob | Why dogfood forced it |
-|------|------------------------|
-| `max_tool_calls` / `max_model_calls` | Real stop reasons; must seed **ledger** so HITL extend doubles the limit that actually fired |
-| `max_code_blocks_per_turn` | Soft prompt styles leak on turn 0; engine can execute first N and note deferred cells |
-| `prompt_style` | `single_block` / `multi_block` / `multi_block_budgeted` fragments — data, not prompt forks of the whole system string |
-| `system_prompt_addon` | Write-early and budget-finite steers without new code paths |
-| Hybrid late phase | Explore with higher cell cap, then tighten + nudge (long multi-fence reviews) |
-| History working set | Prevent input escalators ([token article](/blog/rlm-history-compaction)) |
+| Knob | Why it showed up in practice |
+|------|------------------------------|
+| `max_tool_calls` / `max_model_calls` | Real stop reasons; must seed a **ledger** so “extend budget” raises the limit that actually fired |
+| `max_code_blocks_per_turn` | Soft prompt styles leak on turn 0; the runtime can execute the first N and note deferred cells |
+| `prompt_style` | `single_block` / `multi_block` / `multi_block_budgeted` as **data**, not forked system prompts |
+| `system_prompt_addon` | Write-early and “budget is finite” steers without new code paths |
+| Hybrid late phase | Explore with a higher cell cap, then tighten (long multi-fence reviews) |
+| History working set | Stops input escalators ([token note](/blog/rlm-history-compaction)) |
 
-### Ledger honesty (ops requirement)
+### Ledger honesty (operations)
 
-A recurring failure mode: engine stops on **`max_tool_calls`**, HITL “extend budget” raises **root steps** or unset ledger rows, warm-continue changes nothing useful.
+A recurring failure mode: the runtime stops on **`max_tool_calls`**, a human “extends budget” by raising **root steps** or an unset ledger row, and warm-continue changes nothing useful.
 
-Strategy work only becomes operationally real when:
+Strategy work is operationally real only when:
 
-1. Limits from the resolved strategy are **seeded** on the budget ledger (not `None`).
+1. Limits from the resolved strategy are **seeded** on the budget ledger (not left `None`).
 2. Actual tool/model counts are **settled** each invocation.
-3. Warm-continue **grants remaining** against the raised ceiling (same pattern as iteration grants).
+3. Warm-continue **grants remaining** against the raised ceiling.
 4. Gates surface **`exhaustion_reason`** so operators know which knob tripped.
 
-Without (1–4), “exploratory with 1000 tool calls” is a paper policy.
+Without that, “exploratory with 1000 tool calls” is a paper policy.
 
-## Worked example
+## Worked scenarios
 
-**Scenario A — short multi-fence probe.** Binding `exploratory` may be wrong: high cell freedom + short steps can still finish (see multi-block A arm), but if you want comparable cell discipline for measurement, set `metadata.rlm_config_id: disciplined` or prompt-only single_block as in the A/B — **knowing** completion risk rises.
+**A — short multi-fence probe.** Default `exploratory` may be wrong: multi-block batching can still finish under a short step budget (see the [A/B note](/blog/rlm-small-cells)). If you force `disciplined` for measurement, treat **completion risk** as part of the experiment, not a surprise.
 
-**Scenario B — long multi-fence review.** Profile default `exploratory` gives tool headroom + hybrid late nudge + history caps. Operator sees `exhaustion_reason=max_tool_calls` → extend **tool** budget, not steps alone.
+**B — long multi-fence review.** Profile default `exploratory` gives tool headroom, hybrid late nudge, and history caps. If you see `exhaustion_reason=max_tool_calls`, extend the **tool** budget — not steps alone.
 
-**Scenario C — single-cell-friendly implement.** Profile `disciplined` keeps one-cell cadence; task can still raise `max_iterations` without rewriting engine code.
+**C — single-cell-friendly implement.** Profile `disciplined` keeps one-cell cadence; the task can still raise `max_iterations` without rewriting engine code.
 
 ## Counterfactuals
 
-1. **If one global default were enough,** multi-fence multi-cell burn and single-cell success would both be well-served by `max_tool_calls≈100` and multi-block prompts. Dogfood showed they are not.
+1. **If one global default were enough,** multi-fence multi-cell burn and single-cell success would both be well-served by something like `max_tool_calls≈100` and multi-block prompts. Live runs showed they are not.
 
-2. **Alternative design: auto-tune from telemetry.** Out of scope for this change set; strategies remain **operator-declared**. Auto-tune would still need a strategy representation like this YAML.
+2. **Auto-tune from telemetry** is a different product. It still needs a strategy representation like this YAML; it does not remove the who/how split.
 
-3. **Alternative: per-provider adapter forks.** Multiplies code paths; fails the “same agent stack, many models” goal.
+3. **Per-provider adapter forks** multiply code paths and fight “same stack, many models.”
 
-4. **Falsifier for the architecture:** a required behavior that cannot be expressed as strategy keys without reading `model` in the engine. None appeared in this design pass; cell caps, prompts, history, and budgets covered the dogfood gaps.
+4. **Falsifier for this architecture:** a required behavior that cannot be expressed as strategy keys without reading `model` in the engine. None appeared in this design pass for cell caps, prompts, history, or budgets.
 
 ## Limitations
 
-- Preset numbers (`1000` tools, `12` cells, hybrid after 3) are **starting points** from one dogfood week, not optimized frontiers.
-- Profile → strategy binding is a **convenience**; mis-bound profiles can silently change cost envelopes — document defaults in run config snapshots.
-- Hard cell caps can surprise models that planned later fences; deferred observation text must stay explicit (turn-discipline spec extension).
-- This article does not claim the exploratory hybrid **fixed deliverable writes**; compaction + hybrid improved token/cell behavior while write thrash remained ([token note](/blog/rlm-history-compaction)).
+- Preset numbers (`1000` tools, `12` cells, hybrid after 3) are **starting points**, not optimized frontiers.
+- Profile → strategy binding is a **convenience**; a mis-bound profile silently changes cost envelopes — snapshot defaults with each run.
+- Hard cell caps can surprise models that planned later fences; deferred-cell messaging must stay explicit.
+- This article does **not** claim hybrid + compaction **fixed deliverable writes**; token and cell behavior improved while write thrash could remain ([token note](/blog/rlm-history-compaction)).
 
 ## Takeaways
 
-1. Split **who** (profile) from **how** (rlm_config strategy).
-2. Encode approaches in **YAML**; resolve with a clear override stack; **never** branch the engine on model id strings.
-3. Put every enforced limit on the **ledger** or HITL will lie.
-4. Include **history** and **cell** policy in the same strategy object — they interact with tool budgets.
-5. Use task metadata when the job’s horizon disagrees with the model’s default personality ([small cells](/blog/rlm-small-cells)).
+1. Split **who** (profile) from **how** (strategy preset).
+2. Encode approaches in **data**; resolve with a clear override stack; **never** branch the engine on model id strings.
+3. Put every enforced limit on the **ledger**, or human “extend” actions will lie.
+4. Keep **history** and **cell** policy on the same strategy object — they interact with tool budgets.
+5. Use task metadata when the job’s horizon disagrees with the model’s default personality ([smaller cells](/blog/rlm-small-cells)).

@@ -1,0 +1,23 @@
+---
+/**
+ * Render a Markdown file under src/ as HTML.
+ * Absolute path via import.meta.url so SSR/dev never use process.cwd()-relative paths.
+ */
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+
+import { marked } from 'marked'
+
+interface Props {
+  /** Path relative to src/, e.g. "content/home/site-intro.md" */
+  src: string
+}
+
+const { src } = Astro.props
+const filePath = fileURLToPath(new URL(`../../${src}`, import.meta.url))
+const raw = readFileSync(filePath, 'utf-8')
+const body = raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n*/, '')
+const html = await marked.parse(body)
+---
+
+<Fragment set:html={html} />
