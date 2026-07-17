@@ -1,0 +1,17 @@
+---
+/**
+ * Render a Markdown string (already inlined via Vite `?raw` import) to HTML.
+ * Do not use readFileSync — source paths are not available in Vercel prerender bundles.
+ */
+import { marked } from 'marked'
+
+interface Props {
+  raw: string
+}
+
+const { raw } = Astro.props
+const body = raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n*/, '')
+const html = await marked.parse(body)
+---
+
+<Fragment set:html={html} />

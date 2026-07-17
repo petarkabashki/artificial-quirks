@@ -5,9 +5,11 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import MarkdownFile from '@/components/home/MarkdownFile.astro'
+import MarkdownBody from '@/components/home/MarkdownBody.astro'
 import Section from '@/components/home/Section.astro'
 import config from '@/site-config'
+// Bundle markdown into the build (works on Vercel; no runtime fs)
+import siteIntroMd from '../content/home/site-intro.md?raw'
 
 export const prerender = true
 
@@ -87,7 +89,7 @@ const featuredWriting = [
             'prose-headings:text-foreground prose-a:text-foreground'
           )}
         >
-          <MarkdownFile src='content/home/site-intro.md' />
+          <MarkdownBody raw={siteIntroMd} />
         </div>
       </Section>
 
