@@ -20,3 +20,15 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## Research authoring
+
+Research articles and authoring skills live in a separate project:
+
+- **Root:** `~/work/authoring`
+- **Skills:** `~/work/authoring/.agent/skills` (`authoring-write-article`, `authoring-figures`, `authoring-review`)
+- **Articles:** `~/work/authoring/publish/content/`
+- **Runtime:** `uv run --project ~/work/authoring/publish/framework …`
+
+Grok discovers skills via `~/.grok/config.toml` → `[skills].paths`.
+
