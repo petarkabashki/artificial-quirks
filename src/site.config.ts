@@ -163,7 +163,7 @@ export const integ: IntegrationUserConfig = {
   },
   // Comment system
   waline: {
-    enable: true,
+    enable: false,
     // Server service link
     server: 'https://astro-theme-pure-waline.arthals.ink/',
     // Show meta info for comments
@@ -174,7 +174,7 @@ export const integ: IntegrationUserConfig = {
     additionalConfigs: {
       // search: false,
       pageview: true,
-      comment: true,
+      comment: false,
       locale: {
         reaction0: 'Like',
         placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'

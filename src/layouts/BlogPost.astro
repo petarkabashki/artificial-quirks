@@ -32,8 +32,11 @@ const {
   title,
   updatedDate,
   draft: isDraft,
-  comment: enableComment
+  comment: postComment
 } = data
+
+// Site-wide waline.enable wins; post frontmatter can only further disable
+const enableComment = config.integ.waline.enable && postComment
 
 const socialImage = heroImage
   ? typeof heroImage.src === 'string'

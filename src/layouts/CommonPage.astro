@@ -2,6 +2,7 @@
 import type { MarkdownHeading } from 'astro'
 
 import { TOC } from 'astro-pure/components/pages'
+import config from 'virtual:config'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import { Comment, PageInfo } from '@/components/waline'
 
@@ -12,7 +13,9 @@ interface Props {
   comment?: boolean
 }
 
-const { title, headings, view, comment: enableComment, ...props } = Astro.props
+const { title, headings, view, comment: pageComment, ...props } = Astro.props
+// Site-wide waline.enable wins; page prop can only further disable
+const enableComment = config.integ.waline.enable && !!pageComment
 ---
 
 <PageLayout meta={{ title }} {...props}>
