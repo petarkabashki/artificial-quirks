@@ -3,15 +3,21 @@ import { Font } from 'astro:assets'
 
 import { prod } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
-import config from 'virtual:config'
+import site from '@/site-config'
 
 type Props = SiteMeta
 
 const { articleDate, description, ogImage, title } = Astro.props
 
-const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
+// Read brand from site.config.ts directly (not virtual:config)
+const brand = site.title
+const delimiter = site.titleDelimiter ?? '·'
+const siteTitle = title && title !== brand ? `${title} ${delimiter} ${brand}` : brand
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url).href
+const socialCard = site.socialCard ?? '/images/social-card.png'
+const socialImageURL = new URL(ogImage ? ogImage : socialCard, Astro.url).href
+const faviconHref =
+  typeof site.favicon === 'string' ? site.favicon : '/favicon/favicon.ico'
 ---
 
 <meta charset='utf-8' />
@@ -20,8 +26,8 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <title>{siteTitle}</title>
 
 {/* Icons / Favicon */}
-<link rel='icon' type={config.favicon.type} href={config.favicon.href} />
-<link rel='shortcut icon' type={config.favicon.type} href={config.favicon.href} />
+<link rel='icon' href={faviconHref} />
+<link rel='shortcut icon' href={faviconHref} />
 <link rel='icon' type='image/png' sizes='32x32' href='/favicon/favicon-32x32.png' />
 <link rel='icon' type='image/png' sizes='16x16' href='/favicon/favicon-16x16.png' />
 <link rel='apple-touch-icon' sizes='180x180' href='/favicon/apple-touch-icon.png' />
@@ -41,7 +47,7 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 {/* Primary Meta Tags */}
 <meta content={siteTitle} name='title' />
 <meta content={description} name='description' />
-<meta content={config.author} name='author' />
+<meta content={site.author} name='author' />
 
 {/* Theme Color */}
 {/* <meta content='' name='theme-color' /> */}
@@ -52,15 +58,15 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content={title} property='og:title' />
 <meta content={description} property='og:description' />
 <meta content={canonicalURL} property='og:url' />
-<meta content={config.title} property='og:site_name' />
-<meta content={config.locale.attrs} property='og:locale' />
+<meta content={site.title} property='og:site_name' />
+<meta content={site.locale?.attrs ?? 'en_US'} property='og:locale' />
 <meta content={socialImageURL} property='og:image' />
 <meta content='1200' property='og:image:width' />
 <meta content='630' property='og:image:height' />
 {
   articleDate && (
     <>
-      <meta content={config.author} property='article:author' />
+      <meta content={site.author} property='article:author' />
       <meta content={articleDate} property='article:published_time' />
     </>
   )
@@ -80,7 +86,7 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <link
   rel='alternate'
   type='application/rss+xml'
-  title={config.title}
+  title={site.title}
   href={`${Astro.site}rss.xml`}
 />
 
@@ -90,9 +96,12 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
   /* User script*/
   prod && (
     <script>
-      console.log( '%c Astro Theme Pure %c https://github.com/cworld1/astro-theme-pure/',
-      'color:#fff;background:linear-gradient(90deg,#448bff,#44e9ff);padding:5px 0;',
-      'color:#000;background:linear-gradient(90deg,#44e9ff,#ffffff);padding:5px 10px 5px 0px;' )
+      console.log(
+        '%c Artificial Quirks %c https://artificialquirks.com ',
+        'color:#fff;background:linear-gradient(90deg,#448bff,#44e9ff);padding:5px 0;',
+        'color:#000;background:linear-gradient(90deg,#44e9ff,#ffffff);padding:5px 10px 5px 0px;'
+      )
     </script>
   )
 }
+
