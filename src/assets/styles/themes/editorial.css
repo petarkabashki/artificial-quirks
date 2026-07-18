@@ -161,7 +161,7 @@
   line-height: 1.6;
 }
 [data-theme='editorial'] .hero-image-slot {
-  min-height: 320px;
+  height: 320px;
   width: 100%;
   overflow: hidden;
   border: 1px solid hsl(var(--border) / 1);
