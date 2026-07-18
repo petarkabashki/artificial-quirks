@@ -36,6 +36,7 @@ const currentPath = Astro.url.pathname
               href={item.link}
               class:list={[
                 'w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3',
+                isEditorial && 'nav-link-editorial',
                 isEditorial && currentPath.startsWith(item.link) && 'nav-active'
               ]}
               aria-label='Nav menu item'
@@ -51,8 +52,19 @@ const currentPath = Astro.url.pathname
             href='/search'
             title='Search'
           >
-            <span class:list={[isEditorial ? 'search-label' : 'sr-only']}>Search</span>
-            <Icon name='search' class='size-5' />
+            {
+              isEditorial ? (
+                <>
+                  <span class='search-circle' aria-hidden='true' />
+                  <span class='search-label'>Search</span>
+                </>
+              ) : (
+                <>
+                  <span class='sr-only'>Search</span>
+                  <Icon name='search' class='size-5' />
+                </>
+              )
+            }
           </a>
         </div>
       </div>
@@ -217,17 +229,29 @@ const currentPath = Astro.url.pathname
     margin: auto;
     width: 6px;
     height: 6px;
+    border-radius: 50%;
     background-color: hsl(var(--primary) / 1);
   }
+  .nav-link-editorial {
+    color: hsl(var(--muted-foreground) / 1);
+  }
   .nav-active {
-    color: hsl(var(--primary) / 1);
-    text-decoration: underline;
-    text-decoration-color: hsl(var(--primary) / 1);
-    text-underline-offset: 6px;
+    color: hsl(var(--foreground) / 1);
+    border-bottom: 1px solid hsl(var(--primary) / 1);
+    padding-bottom: 2px;
+  }
+  .search-circle {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: 1.3px solid hsl(var(--muted-foreground) / 1);
+    border-radius: 50%;
+    flex-shrink: 0;
   }
   .search-label {
     font-family: var(--font-mono);
     font-size: 13.5px;
+    color: hsl(var(--muted-foreground) / 1);
   }
 
   /* dark light mode toggle */

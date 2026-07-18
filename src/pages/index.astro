@@ -75,8 +75,8 @@ const rlmSeries = [
   <main class='flex w-full flex-col items-center'>
     <section
       class={cn(
-        'animate mb-10',
-        isEditorial ? 'hero-editorial' : 'flex flex-col items-center gap-y-4 text-center'
+        'animate',
+        isEditorial ? 'hero-editorial' : 'mb-10 flex flex-col items-center gap-y-4 text-center'
       )}
       id='content-header'
     >
@@ -124,7 +124,7 @@ const rlmSeries = [
     </section>
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-      <Section title='This site'>
+      <Section title='This site' class={isEditorial ? 'section-divider' : undefined}>
         <div
           class={cn(
             'max-w-none text-muted-foreground',
@@ -136,14 +136,18 @@ const rlmSeries = [
         </div>
       </Section>
 
-      <Section title='Current series' class='scroll-mt-24' id='current-series'>
+      <Section
+        title='Current series'
+        class={cn('scroll-mt-24', isEditorial && 'section-divider')}
+        id='current-series'
+      >
         <p class='text-sm text-muted-foreground'>
           Recursive language-model loops: three notes on cells, history, and named strategies.
         </p>
         <ol class={cn('flex flex-col text-muted-foreground', isEditorial ? 'series-list' : 'gap-y-4')}>
           {
             rlmSeries.map((item) => (
-              <li class='flex gap-x-3'>
+              <li class={isEditorial ? 'series-row' : 'flex gap-x-3'}>
                 <span
                   class={cn(
                     'mt-0.5 flex shrink-0 items-center text-xs font-medium text-foreground',
@@ -160,6 +164,11 @@ const rlmSeries = [
                   </a>
                   <p class='text-sm'>{item.blurb}</p>
                 </div>
+                {isEditorial && (
+                  <div class='series-thumb placeholder-box' aria-hidden='true'>
+                    <span>Image</span>
+                  </div>
+                )}
               </li>
             ))
           }
@@ -167,7 +176,7 @@ const rlmSeries = [
         <Button title='All posts' class='w-fit self-end' href='/blog' variant='ahead' />
       </Section>
 
-      <Section title='Topics'>
+      <Section title='Topics' class={isEditorial ? 'section-divider' : undefined}>
         <ul
           class={cn(
             'grid grid-cols-1 sm:grid-cols-2',
@@ -180,10 +189,10 @@ const rlmSeries = [
                 <a
                   href={t.href}
                   class={cn(
-                    'block h-full p-4 transition-colors',
+                    'block h-full transition-colors',
                     isEditorial
-                      ? 'hover:bg-muted'
-                      : 'rounded-xl border bg-background/60 hover:border-foreground/25 hover:bg-background'
+                      ? 'topics-cell hover:bg-muted'
+                      : 'rounded-xl border bg-background/60 p-4 hover:border-foreground/25 hover:bg-background'
                   )}
                 >
                   <h3 class='font-medium text-foreground'>{t.title}</h3>
@@ -195,16 +204,34 @@ const rlmSeries = [
         </ul>
       </Section>
 
-      <Section title='Work with us'>
-        <p class='text-muted-foreground'>
-          Optional advisory: agent runtime reviews, evaluation design, and GenAI platform
-          architecture under real operational constraints.
-        </p>
-        <div class='flex flex-wrap gap-3'>
-          <Button title='View services' href='/services' variant='ahead' />
-          <Button title='About the author' href='/about' variant='back' />
-        </div>
-      </Section>
+      {
+        isEditorial ? (
+          <section class='work-panel'>
+            <div>
+              <h2>Work with us</h2>
+              <p class='text-muted-foreground'>
+                Optional advisory: agent runtime reviews, evaluation design, and GenAI platform
+                architecture under real operational constraints.
+              </p>
+            </div>
+            <div class='flex flex-wrap gap-3'>
+              <Button title='View services' href='/services' variant='ahead' class='cta-solid' />
+              <Button title='About the author' href='/about' variant='back' class='cta-outline' />
+            </div>
+          </section>
+        ) : (
+          <Section title='Work with us'>
+            <p class='text-muted-foreground'>
+              Optional advisory: agent runtime reviews, evaluation design, and GenAI platform
+              architecture under real operational constraints.
+            </p>
+            <div class='flex flex-wrap gap-3'>
+              <Button title='View services' href='/services' variant='ahead' />
+              <Button title='About the author' href='/about' variant='back' />
+            </div>
+          </Section>
+        )
+      }
 
       {
         allPostsByDate.length >= SHOW_RECENT_THRESHOLD && (

@@ -51,7 +51,12 @@
 [data-theme='editorial'] h3 {
   font-family: var(--font-serif);
   font-weight: 600;
-  letter-spacing: -0.01em;
+}
+[data-theme='editorial'] h2 {
+  font-size: 26px;
+}
+[data-theme='editorial'] h3 {
+  font-size: 21px;
 }
 [data-theme='editorial'] blockquote {
   font-family: var(--font-serif);
@@ -102,13 +107,36 @@
   flex-shrink: 0;
 }
 
+/* Homepage — sections sit flush against each other with their own
+ * padding + hairline divider, instead of the default theme's flex gap. */
+[data-theme='editorial'] #content {
+  gap: 0;
+}
+[data-theme='editorial'] .section-divider {
+  border-bottom: 1px solid hsl(var(--border) / 1);
+  padding-block: 56px;
+  /* Section.astro is a label-column/content-column row at md: — the
+   * prototype's sections stack title above content, full width, so force
+   * a single column here instead (needs !important to beat md:flex-row /
+   * md:gap-y-0, which still match at this breakpoint). */
+  flex-direction: column !important;
+  row-gap: 20px !important;
+}
+[data-theme='editorial'] .section-divider:first-child {
+  padding-top: 0;
+}
+[data-theme='editorial'] .section-divider > div:first-child {
+  min-width: 0;
+}
+
 /* Homepage hero */
 [data-theme='editorial'] .hero-editorial {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   align-items: center;
-  gap: 2.5rem;
+  gap: 44px;
   padding-block: 76px 56px;
+  border-bottom: 1px solid hsl(var(--border) / 1);
   text-align: start;
 }
 @media (max-width: 900px) {
@@ -156,7 +184,7 @@
   background-color: hsl(var(--muted) / 1);
 }
 
-/* "Current series" — mono index numbers + hairline row dividers */
+/* "Current series" — mono index numbers, thumbnail, hairline row dividers */
 [data-theme='editorial'] .series-list > li {
   border-top: 1px solid hsl(var(--border) / 1);
   padding-block: 22px;
@@ -165,11 +193,29 @@
   border-top: none;
   padding-top: 0;
 }
+[data-theme='editorial'] .series-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 96px;
+  gap: 18px;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  [data-theme='editorial'] .series-row {
+    grid-template-columns: 36px 1fr;
+  }
+  [data-theme='editorial'] .series-thumb {
+    display: none;
+  }
+}
 [data-theme='editorial'] .series-index {
   width: 36px;
   font-family: var(--font-mono);
   color: hsl(var(--primary) / 1);
   font-size: 14px;
+}
+[data-theme='editorial'] .series-thumb {
+  width: 96px;
+  height: 72px;
 }
 
 /* "Topics" — shared hairline grid instead of individual cards */
@@ -181,6 +227,28 @@
 [data-theme='editorial'] .topics-grid > li {
   border-right: 1px solid hsl(var(--border) / 1);
   border-bottom: 1px solid hsl(var(--border) / 1);
+}
+[data-theme='editorial'] .topics-cell {
+  padding: 22px;
+}
+
+/* "Work with us" — bgAlt panel (title/desc + buttons together, no shared
+ * Section label column) */
+[data-theme='editorial'] .work-panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  background-color: hsl(var(--muted) / 1);
+  padding: 44px;
+}
+[data-theme='editorial'] .work-panel h2 {
+  font-size: 23px;
+  margin: 0 0 10px;
+}
+[data-theme='editorial'] .work-panel > div:first-child {
+  max-width: 480px;
 }
 
 /* Blog index rows (ejected PostPreview.astro) */
@@ -230,9 +298,41 @@
   position: relative;
 }
 
-/* Article — tag chips (Hero.astro, package component; styled via its
- * existing data-pagefind-filter='tag' hook, no eject needed). Zero the
- * "/"-separator text nodes via font-size, then restore size on the chip. */
+/* Bare mono "back" link (ContentLayout.astro), replacing the bordered
+ * chevron Button used elsewhere */
+[data-theme='editorial'] .back-link-editorial {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: hsl(var(--muted-foreground) / 1);
+  text-decoration: none;
+}
+[data-theme='editorial'] .back-link-editorial:hover {
+  color: hsl(var(--primary) / 1);
+}
+
+/* Article header (Hero.astro, package component; styled via existing hooks,
+ * no eject needed) — plain mono meta row, no icons, 38px serif H1. */
+[data-theme='editorial'] .article-info svg {
+  display: none;
+}
+[data-theme='editorial'] .article-info > div:first-child {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  gap: 10px;
+}
+[data-theme='editorial'] .article-info > div:first-child .font-sans {
+  font-family: var(--font-mono) !important;
+}
+[data-theme='editorial'] .article-info h1 {
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-top: 24px;
+}
+
+/* Tag chips — styled via the existing data-pagefind-filter='tag' hook. Zero
+ * the "/"-separator text nodes via font-size, then restore size on the chip. */
 [data-theme='editorial'] .article-info div:has(> a[data-pagefind-filter='tag']) {
   font-size: 0;
 }
@@ -270,15 +370,41 @@
   content: none;
 }
 
-/* Code block chrome — reuse the existing shiki transformers' title/language/
- * copy-button markup (src/plugins/shiki-custom-transformers.ts), just reskin. */
+/* Code block — bare label + <pre>, matching the prototype (no line numbers,
+ * no language pill, no copy button chrome). Reuses the existing shiki
+ * transformers' markup (src/plugins/shiki-custom-transformers.ts), just
+ * hides the extra chrome and reskins what's left. */
 [data-theme='editorial'] .astro-code {
   border-radius: 0;
   border: 1px solid hsl(var(--border) / 1);
+  background-color: hsl(var(--muted) / 1) !important;
 }
-[data-theme='editorial'] .astro-code .title,
-[data-theme='editorial'] .astro-code .language {
+[data-theme='editorial'] .astro-code:has(div.title) {
+  padding-top: 0;
+}
+[data-theme='editorial'] .astro-code .title {
+  position: static;
+  margin: 0;
+  padding: 20px 22px 0;
+  border: none;
+  background: none;
   font-family: var(--font-mono);
+  font-size: 12px;
+  color: hsl(var(--muted-foreground) / 1);
+}
+[data-theme='editorial'] .astro-code .language,
+[data-theme='editorial'] .astro-code button.copy {
+  display: none;
+}
+[data-theme='editorial'] .astro-code code::before,
+[data-theme='editorial'] .astro-code .line::before {
+  display: none;
+}
+[data-theme='editorial'] .astro-code .line {
+  padding-inline: 22px;
+}
+[data-theme='editorial'] .astro-code pre {
+  padding-block: 20px;
 }
 
 /* Article prev/next footer (ejected ArticleBottom.astro) */

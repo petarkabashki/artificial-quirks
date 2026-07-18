@@ -10,14 +10,23 @@ interface Props {
   meta: SiteMeta
   highlightColor?: string
   back?: string
+  backLabel?: string
 }
 
-const { meta, highlightColor, back = '/', ...props } = Astro.props
+const { meta, highlightColor, back = '/', backLabel = 'Back', ...props } = Astro.props
 const isEditorial = activeTheme === 'editorial'
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
-  <Button title='Back' href={back} variant='back' />
+  {
+    isEditorial ? (
+      <a href={back} class='back-link-editorial'>
+        ← {backLabel}
+      </a>
+    ) : (
+      <Button title={backLabel} href={back} variant='back' />
+    )
+  }
   <main class={cn('mt-6', !isEditorial && 'items-start gap-x-10 md:flex')}>
     {/* Sidebar (dropped for the editorial theme — single-column reading) */}
     {
