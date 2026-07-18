@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
@@ -6,6 +7,10 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import MarkdownBody from '@/components/home/MarkdownBody.astro'
 import Section from '@/components/home/Section.astro'
 import config, { activeTheme } from '@/site-config'
+import heroImage from '@/assets/home/hero.jpg'
+import smallCellsCover from '../content/blog/rlm-small-cells/cover.jpg'
+import historyCompactionCover from '../content/blog/rlm-history-compaction/cover.jpg'
+import executionStrategiesCover from '../content/blog/rlm-execution-strategies/cover.jpg'
 // Bundle markdown into the build (works on Vercel; no runtime fs)
 import siteIntroMd from '../content/home/site-intro.md?raw'
 
@@ -46,19 +51,22 @@ const rlmSeries = [
     title: 'When Smaller Cells Make Agents Worse',
     blurb:
       'Prompt-only “smaller cells” improved aesthetics and missed completion under a short step budget.',
-    part: 1
+    part: 1,
+    image: smallCellsCover
   },
   {
     href: '/blog/rlm-history-compaction',
     title: 'RLM Is Not Automatically Token-Efficient',
     blurb: 'History policy plateaus input tokens; cheaper runs still need deliverable checks.',
-    part: 2
+    part: 2,
+    image: historyCompactionCover
   },
   {
     href: '/blog/rlm-execution-strategies',
     title: 'Strategies, Not Model Ifs',
     blurb: 'Named YAML strategies beat model-id branches in the agent runtime.',
-    part: 3
+    part: 3,
+    image: executionStrategiesCover
   }
 ]
 ---
@@ -116,8 +124,8 @@ const rlmSeries = [
       </div>
       {
         isEditorial && (
-          <div class='hero-image-slot placeholder-box' aria-hidden='true'>
-            <span>Image</span>
+          <div class='hero-image-slot'>
+            <Image src={heroImage} alt='' loading='eager' />
           </div>
         )
       }
@@ -165,8 +173,8 @@ const rlmSeries = [
                   <p class='text-sm'>{item.blurb}</p>
                 </div>
                 {isEditorial && (
-                  <div class='series-thumb placeholder-box' aria-hidden='true'>
-                    <span>Image</span>
+                  <div class='series-thumb' aria-hidden='true'>
+                    <Image src={item.image} alt='' loading='lazy' />
                   </div>
                 )}
               </li>

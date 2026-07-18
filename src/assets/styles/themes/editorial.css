@@ -163,6 +163,13 @@
 [data-theme='editorial'] .hero-image-slot {
   min-height: 320px;
   width: 100%;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border) / 1);
+}
+[data-theme='editorial'] .hero-image-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* CTA buttons */
@@ -216,6 +223,13 @@
 [data-theme='editorial'] .series-thumb {
   width: 96px;
   height: 72px;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border) / 1);
+}
+[data-theme='editorial'] .series-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* "Topics" — shared hairline grid instead of individual cards */
@@ -312,7 +326,17 @@
 }
 
 /* Article header (Hero.astro, package component; styled via existing hooks,
- * no eject needed) — plain mono meta row, no icons, 38px serif H1. */
+ * no eject needed) — 320px flat hero image, no rounded corners/blur ghost. */
+[data-theme='editorial'] .hero-image .cover-image {
+  height: 320px;
+  max-width: 100%;
+  border: 1px solid hsl(var(--border) / 1);
+  border-radius: 0;
+  object-fit: cover;
+}
+[data-theme='editorial'] .hero-image #blurImage {
+  display: none;
+}
 [data-theme='editorial'] .article-info svg {
   display: none;
 }

@@ -2,6 +2,9 @@
 title: "RLM Is Not Automatically Token-Efficient"
 publishDate: 2026-07-02
 description: "History thrash erases recursive-loop savings; compaction plateaus input without fixing write thrash alone."
+heroImage:
+  src: "./cover.jpg"
+  alt: "Many light strands converging and compacting into a single luminous form"
 tags:
   - rlm
   - tokens
