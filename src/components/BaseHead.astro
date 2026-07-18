@@ -3,7 +3,7 @@ import { Font } from 'astro:assets'
 
 import { prod } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
-import site from '@/site-config'
+import site, { activeTheme } from '@/site-config'
 
 type Props = SiteMeta
 
@@ -40,6 +40,18 @@ const faviconHref =
     font-family: var(--font-satoshi);
   }
 </style>
+
+{
+  /* [Editorial theme] only ship these fonts when the theme is active — see
+  src/assets/styles/themes/editorial.css */
+  activeTheme === 'editorial' && (
+    <>
+      <Font cssVariable='--font-source-serif' preload={[{ subset: 'latin', style: 'normal' }]} />
+      <Font cssVariable='--font-inter' preload={[{ subset: 'latin', style: 'normal' }]} />
+      <Font cssVariable='--font-plex-mono' preload={[{ subset: 'latin', style: 'normal' }]} />
+    </>
+  )
+}
 
 {/* Canonical URL */}
 <link rel='canonical' href={canonicalURL} />

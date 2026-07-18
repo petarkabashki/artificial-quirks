@@ -68,6 +68,31 @@ export default defineConfig({
       styles: ['normal', 'italic'],
       weights: [400, 500],
       subsets: ['latin']
+    },
+    // [Editorial theme] see src/assets/styles/themes/editorial.css
+    {
+      provider: fontProviders.google(),
+      name: 'Source Serif 4',
+      cssVariable: '--font-source-serif',
+      styles: ['normal', 'italic'],
+      weights: [400, 500, 600, 700],
+      subsets: ['latin']
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Inter',
+      cssVariable: '--font-inter',
+      styles: ['normal'],
+      weights: [400, 500, 600],
+      subsets: ['latin']
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'IBM Plex Mono',
+      cssVariable: '--font-plex-mono',
+      styles: ['normal'],
+      weights: [400, 500],
+      subsets: ['latin']
     }
   ],
 

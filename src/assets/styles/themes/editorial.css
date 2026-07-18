@@ -1,0 +1,315 @@
+/* Editorial theme — token layer
+ *
+ * Scoped entirely under [data-theme='editorial'] so it's purely additive: the
+ * `default` theme (unscoped :root/.dark in app.css) is untouched, and switching
+ * `activeTheme` back to 'default' in src/site.config.ts fully reverts this.
+ *
+ * Color tokens below are HSL triplets converted from the oklch palette in
+ * digest/in/design_handoff_blog_redesign/README.md, kept in the same
+ * `--token: H S% L%` convention as app.css so every existing
+ * `hsl(var(--token) / <alpha>)` usage (UnoCSS theme colors, inline styles)
+ * picks them up unchanged.
+ */
+
+[data-theme='editorial'] {
+  /* Light palette (warm paper) */
+  --background: 34.1 57.6% 96.9%; /* bg */
+  --muted: 31.3 38.3% 92.9%; /* bgAlt */
+  --card: 31.3 38.3% 92.9%; /* bgAlt */
+  --foreground: 21.3 33.2% 9.4%; /* ink */
+  --muted-foreground: 20.9 11.7% 32.3%; /* sub */
+  --border: 25.9 17.3% 84.2%;
+  --input: 25.9 17.3% 84.2%;
+  --primary: 11.9 66.2% 35.7%; /* accent (terracotta) */
+  --ring: 11.9 66.2% 35.7%;
+  --radius: 0rem;
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-source-serif);
+  --font-mono: var(--font-plex-mono);
+}
+
+[data-theme='editorial'].dark {
+  /* Dark palette */
+  --background: 21 21.9% 6.9%;
+  --muted: 21 19.8% 11.3%;
+  --card: 21 19.8% 11.3%;
+  --foreground: 25.9 24.7% 90.7%;
+  --muted-foreground: 23.4 7.4% 57.2%;
+  --border: 20.9 12.3% 19.9%;
+  --input: 20.9 12.3% 19.9%;
+  --primary: 12 74.9% 66.9%;
+  --ring: 12 74.9% 66.9%;
+}
+
+/* Typography */
+[data-theme='editorial'] body {
+  font-family: var(--font-sans);
+}
+[data-theme='editorial'] h1,
+[data-theme='editorial'] h2,
+[data-theme='editorial'] h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+[data-theme='editorial'] blockquote {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* Mono accent — dates, tags, index numbers, nav breadcrumbs.
+ * Not yet wired into components (structural pass is deferred); reusable here
+ * for that follow-up. */
+[data-theme='editorial'] .font-mono-accent {
+  font-family: var(--font-mono);
+  color: hsl(var(--primary) / 1);
+}
+
+/* Square corners, no shadows — applied to existing utility classes without
+ * touching component markup. */
+[data-theme='editorial']
+  :is(.rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full) {
+  border-radius: 0 !important;
+}
+[data-theme='editorial'] :is([class*='shadow']) {
+  box-shadow: none !important;
+}
+
+/* ---------------------------------------------------------------------- *
+ * Structural pass (header, homepage, blog index, article) — see the
+ * "structural pass" plan. Elements below only exist in the DOM when
+ * activeTheme === 'editorial' (gated in the .astro files), so these rules
+ * don't need extra guarding beyond the [data-theme='editorial'] scope kept
+ * for selector-specificity safety against UnoCSS-generated utility classes.
+ * ---------------------------------------------------------------------- */
+
+/* Shared placeholder-image convention (hero, blog thumbnails) — the handoff
+ * ships no real photography, so this mirrors the prototype's own
+ * drag-and-drop placeholder slots until real imagery is sourced. */
+[data-theme='editorial'] .placeholder-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: hsl(var(--muted) / 1);
+  border: 1px solid hsl(var(--border) / 1);
+  color: hsl(var(--muted-foreground) / 1);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Homepage hero */
+[data-theme='editorial'] .hero-editorial {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 2.5rem;
+  padding-block: 76px 56px;
+  text-align: start;
+}
+@media (max-width: 900px) {
+  [data-theme='editorial'] .hero-editorial {
+    grid-template-columns: 1fr;
+    padding-block: 2.5rem;
+  }
+}
+[data-theme='editorial'] .hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+[data-theme='editorial'] .hero-title {
+  font-size: 54px;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+[data-theme='editorial'] .hero-subhead {
+  font-size: 19px;
+  line-height: 1.6;
+}
+[data-theme='editorial'] .hero-image-slot {
+  min-height: 320px;
+  width: 100%;
+}
+
+/* CTA buttons */
+[data-theme='editorial'] .cta-solid {
+  background-color: hsl(var(--primary) / 1);
+  border-color: hsl(var(--primary) / 1);
+  color: hsl(var(--background) / 1);
+}
+[data-theme='editorial'] .cta-solid:hover {
+  background-color: hsl(var(--primary) / 0.85);
+  color: hsl(var(--background) / 1);
+}
+[data-theme='editorial'] .cta-outline {
+  background-color: transparent;
+  border-color: hsl(var(--foreground) / 1);
+  color: hsl(var(--foreground) / 1);
+}
+[data-theme='editorial'] .cta-outline:hover {
+  background-color: hsl(var(--muted) / 1);
+}
+
+/* "Current series" — mono index numbers + hairline row dividers */
+[data-theme='editorial'] .series-list > li {
+  border-top: 1px solid hsl(var(--border) / 1);
+  padding-block: 22px;
+}
+[data-theme='editorial'] .series-list > li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+[data-theme='editorial'] .series-index {
+  width: 36px;
+  font-family: var(--font-mono);
+  color: hsl(var(--primary) / 1);
+  font-size: 14px;
+}
+
+/* "Topics" — shared hairline grid instead of individual cards */
+[data-theme='editorial'] .topics-grid {
+  gap: 0;
+  border-top: 1px solid hsl(var(--border) / 1);
+  border-left: 1px solid hsl(var(--border) / 1);
+}
+[data-theme='editorial'] .topics-grid > li {
+  border-right: 1px solid hsl(var(--border) / 1);
+  border-bottom: 1px solid hsl(var(--border) / 1);
+}
+
+/* Blog index rows (ejected PostPreview.astro) */
+[data-theme='editorial'] ul:has(> .post-preview-editorial) {
+  gap: 0;
+}
+[data-theme='editorial'] .post-preview-editorial {
+  border-top: 1px solid hsl(var(--border) / 1);
+}
+[data-theme='editorial'] .post-preview-editorial:first-child {
+  border-top: none;
+}
+[data-theme='editorial'] .preview-row {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 1.5rem;
+  align-items: start;
+  padding-block: 30px;
+}
+@media (max-width: 640px) {
+  [data-theme='editorial'] .preview-row {
+    grid-template-columns: 1fr;
+  }
+}
+[data-theme='editorial'] .preview-meta {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground) / 1);
+}
+[data-theme='editorial'] .preview-tag {
+  color: hsl(var(--primary) / 1);
+}
+[data-theme='editorial'] .preview-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 23px;
+  margin-block: 0.25rem;
+}
+[data-theme='editorial'] .preview-desc {
+  color: hsl(var(--muted-foreground) / 1);
+  font-size: 16px;
+  max-width: 640px;
+}
+[data-theme='editorial'] .preview-thumb {
+  width: 140px;
+  height: 96px;
+  position: relative;
+}
+
+/* Article — tag chips (Hero.astro, package component; styled via its
+ * existing data-pagefind-filter='tag' hook, no eject needed). Zero the
+ * "/"-separator text nodes via font-size, then restore size on the chip. */
+[data-theme='editorial'] .article-info div:has(> a[data-pagefind-filter='tag']) {
+  font-size: 0;
+}
+[data-theme='editorial'] .article-info a[data-pagefind-filter='tag'] {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: hsl(var(--primary) / 1);
+  border: 1px solid hsl(var(--border) / 1);
+  padding: 4px 10px;
+  margin-inline-end: 6px;
+}
+[data-theme='editorial'] .article-info blockquote {
+  font-size: 20px;
+  line-height: 1.6;
+}
+/* Disable the scroll-driven blur underlay; keep it simple/static */
+[data-theme='editorial'] #blurImage {
+  display: none;
+}
+
+/* Pull quotes / body blockquotes inside article prose — left accent border
+ * instead of the default preset's boxed/shadowed/quote-mark treatment. */
+[data-theme='editorial'] .prose blockquote {
+  border-width: 0 0 0 2px;
+  border-inline-start-color: hsl(var(--primary) / 1);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 4px 0 4px 22px;
+  overflow: visible;
+  font-size: 21px;
+  line-height: 1.5;
+}
+[data-theme='editorial'] .prose blockquote::after {
+  content: none;
+}
+
+/* Code block chrome — reuse the existing shiki transformers' title/language/
+ * copy-button markup (src/plugins/shiki-custom-transformers.ts), just reskin. */
+[data-theme='editorial'] .astro-code {
+  border-radius: 0;
+  border: 1px solid hsl(var(--border) / 1);
+}
+[data-theme='editorial'] .astro-code .title,
+[data-theme='editorial'] .astro-code .language {
+  font-family: var(--font-mono);
+}
+
+/* Article prev/next footer (ejected ArticleBottom.astro) */
+[data-theme='editorial'] .article-bottom-nav {
+  border-top: 1px solid hsl(var(--border) / 1);
+  padding-top: 1rem;
+}
+[data-theme='editorial'] .article-nav-link {
+  padding-inline: 0;
+}
+[data-theme='editorial'] .article-nav-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: hsl(var(--muted-foreground) / 1);
+}
+
+/* Footer — reveal the RSS text label (kept sr-only for a11y elsewhere) */
+[data-theme='editorial'] footer .sl-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+[data-theme='editorial'] footer .sl-flex .sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}

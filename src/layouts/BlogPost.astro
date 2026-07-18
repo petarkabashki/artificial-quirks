@@ -6,10 +6,12 @@ import type { CollectionEntry } from 'astro:content'
 import 'katex/dist/katex.min.css'
 
 import { MediumZoom } from 'astro-pure/advanced'
-import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
+import { Copyright, Hero, TOC } from 'astro-pure/components/pages'
 import config from 'virtual:config'
-import PageLayout from '@/layouts/ContentLayout.astro'
+import ArticleBottom from '@/components/pages/ArticleBottom.astro'
 import { Comment, PageInfo } from '@/components/waline'
+import PageLayout from '@/layouts/ContentLayout.astro'
+import { activeTheme } from '@/site-config'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -52,7 +54,7 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   highlightColor={primaryColor}
   back='/blog'
 >
-  {!!headings.length && <TOC {headings} slot='sidebar' />}
+  {!!headings.length && activeTheme !== 'editorial' && <TOC {headings} slot='sidebar' />}
 
   <Hero {data} {remarkPluginFrontmatter} slot='header'>
     <Fragment slot='description'>

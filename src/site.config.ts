@@ -1,5 +1,10 @@
 import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
+/** Visual theme (design tokens/typography), independent of the light/dark mode toggle. */
+export type SiteTheme = 'default' | 'editorial'
+/** Active visual theme for the whole site. Switch and revert by changing this value. */
+export const activeTheme: SiteTheme = 'editorial'
+
 export const theme: ThemeUserConfig = {
   // [Basic]
   /** Title for your website. Will be used in metadata and as browser tab title. */

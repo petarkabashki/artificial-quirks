@@ -4,18 +4,24 @@
  * matches src/site.config.ts without relying on the pure integration virtual module.
  */
 import { Icon } from 'astro-pure/user'
-import config from '@/site-config'
+import config, { activeTheme } from '@/site-config'
+
+const isEditorial = activeTheme === 'editorial'
+const currentPath = Astro.url.pathname
 ---
 
 <header-component
   class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <a
-    class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
+    class='z-30 flex items-center gap-x-2 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
     style='transition:margin-inline 0.3s'
     href='/'
-    aria-label='Brand'>{config.title}</a
+    aria-label='Brand'
   >
+    {isEditorial && <span class='mark' aria-hidden='true' />}
+    {config.title}
+  </a>
 
   <div class='flex items-center gap-x-2'>
     {/* Menu links */}
@@ -28,7 +34,10 @@ import config from '@/site-config'
           (config.header?.menu ?? []).map((item) => (
             <a
               href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
+              class:list={[
+                'w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3',
+                isEditorial && currentPath.startsWith(item.link) && 'nav-active'
+              ]}
               aria-label='Nav menu item'
               data-astro-prefetch
             >
@@ -37,8 +46,12 @@ import config from '@/site-config'
           ))
         }
         <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
-          <a class='px-1 py-2 transition-none sm:px-2' href='/search' title='Search'>
-            <span class='sr-only'>Search</span>
+          <a
+            class='flex items-center gap-x-1.5 px-1 py-2 transition-none sm:px-2'
+            href='/search'
+            title='Search'
+          >
+            <span class:list={[isEditorial ? 'search-label' : 'sr-only']}>Search</span>
             <Icon name='search' class='size-5' />
           </a>
         </div>
@@ -185,6 +198,36 @@ import config from '@/site-config'
       background-color: hsl(var(--muted) / var(--un-bg-opacity, 1));
       border-bottom-color: hsl(var(--border) / var(--un-border-opacity, 1));
     }
+  }
+
+  /* [Editorial theme] mark, active nav underline, search label */
+  .mark {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid hsl(var(--primary) / 1);
+    flex-shrink: 0;
+  }
+  .mark::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 6px;
+    height: 6px;
+    background-color: hsl(var(--primary) / 1);
+  }
+  .nav-active {
+    color: hsl(var(--primary) / 1);
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary) / 1);
+    text-underline-offset: 6px;
+  }
+  .search-label {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
   }
 
   /* dark light mode toggle */
