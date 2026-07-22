@@ -1,9 +1,9 @@
 ---
 title: "When Smaller Cells Make Agents Worse"
-publishDate: 2026-06-21
+publishDate: "2026-07-09"
 description: "Smaller cells cut cells/turn but can exhaust step budgets; match policy to horizon, not aesthetics."
 heroImage:
-  src: "./cover.jpg"
+  src: "./cover.png"
   alt: "Rows of illuminated glass server towers, evoking many discrete compute cells"
 tags:
   - rlm

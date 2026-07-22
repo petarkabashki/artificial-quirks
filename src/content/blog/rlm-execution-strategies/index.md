@@ -1,9 +1,9 @@
 ---
 title: "Strategies, Not Model Ifs"
-publishDate: 2026-07-14
+publishDate: "2026-06-28"
 description: "Named strategy presets beat model-id ifs: cell budgets, history caps, and hybrid phases on one object."
 heroImage:
-  src: "./cover.jpg"
+  src: "./cover.png"
   alt: "A hand selecting a control point on a glowing circuit interface"
 tags:
   - rlm
