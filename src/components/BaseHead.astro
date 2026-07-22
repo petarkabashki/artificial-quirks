@@ -18,6 +18,7 @@ const socialCard = site.socialCard ?? '/images/social-card.png'
 const socialImageURL = new URL(ogImage ? ogImage : socialCard, Astro.url).href
 const faviconHref =
   typeof site.favicon === 'string' ? site.favicon : '/favicon/favicon.ico'
+const pageOgTitle = !title || title === 'Home' ? site.title : siteTitle
 ---
 
 <meta charset='utf-8' />
@@ -67,7 +68,7 @@ const faviconHref =
 
 {/* Open Graph / Facebook */}
 <meta content={articleDate ? 'article' : 'website'} property='og:type' />
-<meta content={title} property='og:title' />
+<meta content={pageOgTitle} property='og:title' />
 <meta content={description} property='og:description' />
 <meta content={canonicalURL} property='og:url' />
 <meta content={site.title} property='og:site_name' />
@@ -87,7 +88,7 @@ const faviconHref =
 {/* Twitter */}
 <meta content='summary_large_image' property='twitter:card' />
 <meta content={canonicalURL} property='twitter:url' />
-<meta content={title} property='twitter:title' />
+<meta content={pageOgTitle} property='twitter:title' />
 <meta content={description} property='twitter:description' />
 <meta content={socialImageURL} property='twitter:image' />
 
