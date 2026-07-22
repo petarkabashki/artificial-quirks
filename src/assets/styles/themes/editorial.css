@@ -256,6 +256,7 @@
   gap: 24px;
   background-color: hsl(var(--muted) / 1);
   padding: 44px;
+  margin-block: 36px;
 }
 [data-theme='editorial'] .work-panel h2 {
   font-size: 23px;

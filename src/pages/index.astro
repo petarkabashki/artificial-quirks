@@ -243,21 +243,33 @@ const rlmSeries = [
 
       {
         allPostsByDate.length >= SHOW_RECENT_THRESHOLD && (
-          <Section title='Recent posts'>
-            <ul class='flex flex-col gap-y-3 text-muted-foreground'>
+          <Section title='Recent posts' class={isEditorial ? 'section-divider' : undefined}>
+            <ul
+              class={cn(
+                'flex flex-col text-muted-foreground',
+                isEditorial ? 'series-list' : 'gap-y-3'
+              )}
+            >
               {allPostsByDate.slice(0, 8).map((p) => (
                 <li>
-                  <a
-                    class='font-medium text-foreground hover:underline'
-                    href={`/blog/${p.id}`}
-                  >
-                    {p.data.title}
-                  </a>
-                  <p class='text-sm'>{p.data.description}</p>
+                  <div>
+                    <a
+                      class='font-medium text-foreground hover:underline'
+                      href={`/blog/${p.id}`}
+                    >
+                      {p.data.title}
+                    </a>
+                    <p class='text-sm'>{p.data.description}</p>
+                  </div>
                 </li>
               ))}
             </ul>
-            <Button title='Blog archive' class='w-fit self-end' href='/blog' variant='ahead' />
+            <Button
+              title='Blog archive'
+              class={cn('w-fit self-end', isEditorial && 'cta-solid')}
+              href='/blog'
+              variant='ahead'
+            />
           </Section>
         )
       }
