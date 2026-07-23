@@ -11,6 +11,8 @@ import '@/assets/styles/global.css'
 import '@/assets/styles/app.css'
 import '@/assets/styles/themes/editorial.css'
 
+import Analytics from '@vercel/analytics/astro'
+
 interface Props {
   meta: SiteMeta
   highlightColor?: string
@@ -27,6 +29,7 @@ const {
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
+    <Analytics />
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>
