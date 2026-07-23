@@ -1,14 +1,16 @@
 ---
 title: "Grounding Is Necessary, Not Sufficient"
 description: "File-path grounding blocks a class of fabricated plans, but it cannot establish that a cited file supports the claim being made."
-publishDate: "2026-06-14"
-updatedDate: "2026-06-14"
+publishDate: "2026-05-21"
+updatedDate: "2026-05-21"
 tags:
   - agent-systems
   - grounding
   - evaluation
   - code-review
-heroImage: { src: "./cover.png", alt: "Grounding Is Necessary, Not Sufficient" }
+heroImage:
+  src: "./cover.png"
+  alt: "Grounding Is Necessary, Not Sufficient"
 draft: false
 comment: true
 ---
@@ -85,4 +87,4 @@ These should complement, not replace, strict path checks. Grounding prevents a p
 - Grounding metrics must state their level: existence, scope, source type, or semantic support.
 - Manual semantic review is expensive; use it where a plan becomes an execution contract.
 
-Read [A Plan Can Validate and Still Be Unsafe to Implement](/blog/agent-plans-semantic-proof/) for the broader readiness model.
+Read [A Plan Can Validate and Still Be Unsafe to Implement](/blog/agent-plans-semantic-proof) for the broader readiness model.

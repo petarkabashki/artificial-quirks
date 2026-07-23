@@ -1,8 +1,8 @@
 ---
 title: "Benchmarking Agent Systems Beyond Did It Finish?"
 description: "A practical scorecard for agent planning experiments separates completion, verification, grounding, repair efficiency, latency, and token cost."
-publishDate: "2026-05-20"
-updatedDate: "2026-05-20"
+publishDate: "2026-04-23"
+updatedDate: "2026-04-23"
 tags:
   - agent-systems
   - benchmarks
@@ -112,4 +112,4 @@ The next benchmark should deterministically force the nonexistent-test repair br
 - Preserve run-level provenance so an aggregate can be audited.
 - Make limitations part of the result, not a footnote after publication.
 
-For the semantic consequence of this framework, read [A Plan Can Validate and Still Be Unsafe to Implement](/blog/agent-plans-semantic-proof/).
+For the semantic consequence of this framework, read [A Plan Can Validate and Still Be Unsafe to Implement](/blog/agent-plans-semantic-proof).

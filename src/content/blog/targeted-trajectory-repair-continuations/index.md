@@ -1,8 +1,8 @@
 ---
-title: "Targeted Trajectory Repair: Low-Cost Child Continuations vs Full Reruns"
-description: "How provenance-linked continuation child runs inherit parent trajectory history to perform targeted grounding repairs at a 90% reduction in LLM compute costs."
-publishDate: "2026-07-23"
-updatedDate: "2026-07-23"
+title: "Targeted Trajectory Repair: Low-Cost Continuations"
+description: "How child runs inherit parent trajectory history to perform targeted grounding repairs at a 90% reduction in compute costs."
+publishDate: "2026-04-22"
+updatedDate: "2026-04-22"
 tags:
   - orchestration
   - continuations
@@ -10,28 +10,31 @@ tags:
   - cost-optimization
 draft: false
 comment: true
+heroImage:
+  src: "./assets/cover.png"
+  alt: "Conceptual illustration of trajectory repair"
 ---
 
-When an autonomous agent trajectory executes 15 turns and completes its work, but fails a final path grounding check or quality gate, re-running the entire trajectory from scratch is wasteful. A full rerun re-executes all preliminary code searches, file inspections, and reasoning steps, burning thousands of LLM tokens for redundant operations.
+Imagine an AI agent has just spent 15 minutes and thousands of tokens diligently analyzing a codebase and writing a complex plan. At the very last step, it fails a quality check. Throwing away all that work and starting over from scratch isn't just frustrating—it's incredibly expensive.
 
-In this article, we demonstrate **Targeted Trajectory Repair** via `orbit-harness run repair-grounding`, an architecture that spawns provenance-linked child continuation runs (`copy_for_continuation`) to perform surgical quality repairs.
+In this article, we demonstrate **Targeted Trajectory Repair**, a surgical approach to fixing AI mistakes. Using our orchestration framework, we show how to create lightweight 'child' runs that pick up exactly where the AI failed, fixing the specific error while saving massive amounts of computing power and time.
 
 ---
 
 ## Provenance-Linked Child Continuations
 
-Instead of resetting execution state, `orbit-harness` creates a lightweight child run that clones the parent's SQLite database trajectory, active workspace state, and turn message history.
+Instead of resetting execution state, our orchestration framework creates a lightweight child run that clones the parent's SQLite database trajectory, active workspace state, and turn message history.
 
 ![Continuation Tree](./assets/continuation-tree.svg)
 
 ### CLI Entrypoint & Kernel Mechanics
 
-The CLI command `orbit-harness run repair-grounding <run_id>` evaluates the source run's unverified path claims and injects a precise repair prompt into the child trajectory:
+The CLI command `orchestrator run repair-grounding <run_id>` evaluates the source run's unverified path claims and injects a precise repair prompt into the child trajectory:
 
 ```python
 # orbit_harness/orchestration/commands.py
 def repair_grounding(self, source_run_id: str) -> CommandResult:
-    run_dir = self.repo_root / ".orbit-harness" / "runs" / source_run_id / "agent-output"
+    run_dir = self.repo_root / ".orchestrator" / "runs" / source_run_id / "agent-output"
     summary = result_data.get("summary", "")
     grounding = check_grounding(summary, self.repo_root)
 

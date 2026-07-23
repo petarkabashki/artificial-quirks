@@ -1,8 +1,8 @@
 ---
 title: "Experiments Should Be First-Class Product Artifacts"
 description: "If an experiment cannot be inspected after the run, its result is operationally weaker than it needs to be."
-publishDate: "2026-06-07"
-updatedDate: "2026-06-07"
+publishDate: "2026-05-04"
+updatedDate: "2026-05-04"
 tags:
   - agent-systems
   - experimentation
@@ -83,4 +83,4 @@ The falsifier is operational: if a new engineer can reconstruct the exact cohort
 - Generate prose reports from raw artifacts, not the other way around.
 - Make publication consume the same durable evidence the operators use.
 
-The companion [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops/) explains the scorecard these artifacts should support.
+The companion [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops) explains the scorecard these artifacts should support.

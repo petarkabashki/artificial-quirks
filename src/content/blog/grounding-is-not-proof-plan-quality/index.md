@@ -1,8 +1,8 @@
 ---
-title: "Grounding Is Not Proof: Why 100% Code Completion Can Still Yield 0% Plan Quality"
-description: "Empirical benchmarking across Gemini 3.6 and DeepSeek tiers reveals why 100% task execution completion rate does not guarantee plan quality, and how pre-finalization checks prevent hallucinated path claims."
-publishDate: "2026-07-23"
-updatedDate: "2026-07-23"
+title: "Grounding Is Not Proof: Why 100% Code Completion Fails"
+description: "Benchmarking reveals why 100% completion rates don't guarantee plan quality, and how pre-finalization checks prevent hallucinated paths."
+publishDate: "2026-03-29"
+updatedDate: "2026-03-29"
 tags:
   - benchmarking
   - plan-quality
@@ -10,11 +10,14 @@ tags:
   - evaluation
 draft: false
 comment: true
+heroImage:
+  src: "./assets/cover.png"
+  alt: "Illustration of verification vs illusion"
 ---
 
-In LLM agent benchmarking, evaluating systems purely by completion state ("did it produce an answer?") creates dangerous false positives. An agent can execute 20 turns, generate zero runtime errors, emit `FINAL(answer)`, and yet submit a plan full of fabricated file paths and unverified code claims.
+It’s easy to assume that if an AI finishes a task without crashing, it did a good job. But what if it confidently hands you a finished blueprint that cites nonexistent materials? In the world of AI agents, evaluating systems purely by whether they finish a task creates dangerous illusions of competence. An AI can execute perfectly, hit no errors, and yet submit a plan full of fabricated file paths and unverified claims.
 
-In this study, we present findings from evaluating **Gemini 3.6 (High, Medium, Low)** and **DeepSeek v4 Flash** under deterministic answer-quality gates in `orbit-harness`.
+In this study, we tested several top-tier AI models—including Gemini 3.6 and DeepSeek v4—and discovered why a 100% completion rate means nothing if the AI’s work isn't strictly "grounded" in reality. More importantly, we show how to build safeguards that force the AI to double-check its facts before submitting its final answer.
 
 ---
 
@@ -35,13 +38,13 @@ During matrix benchmarks, Gemini 3.6 model tiers consistently achieved **100% ex
 
 ## Pre-Finalization Intercept & Self-Correction
 
-To eliminate ungrounded answers without forcing full trajectory reruns, we implemented a **Pre-Finalization Quality Intercept** in `orbit-harness`.
+To eliminate ungrounded answers without forcing full trajectory reruns, we implemented a **Pre-Finalization Quality Intercept** in our orchestration framework.
 
 ![Quality Gate Flow](./assets/quality-gate-flow.svg)
 
 ### Intercept Implementation
 
-When a model attempts to emit `FINAL(answer)`, `orbit-harness` extracts path claims and checks them against `check_grounding()`. If unverified paths are found:
+When a model attempts to emit `FINAL(answer)`, our orchestration framework extracts path claims and checks them against `check_grounding()`. If unverified paths are found:
 
 ```python
 # orbit_harness/rlm/general/rlm.py

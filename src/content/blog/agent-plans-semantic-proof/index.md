@@ -1,14 +1,16 @@
 ---
 title: "A Plan Can Validate and Still Be Unsafe to Implement"
 description: "A controlled indexed-planner study shows why structural validation, path grounding, and semantic review must be reported as separate gates."
-publishDate: "2026-05-10"
-updatedDate: "2026-05-10"
+publishDate: "2026-05-16"
+updatedDate: "2026-05-16"
 tags:
   - agent-systems
   - planning
   - evaluation
   - reliability
-heroImage: { src: "./cover.png", alt: "A Plan Can Validate and Still Be Unsafe to Implement" }
+heroImage:
+  src: "./cover.png"
+  alt: "A Plan Can Validate and Still Be Unsafe to Implement"
 draft: false
 comment: true
 ---
@@ -87,4 +89,4 @@ In parallel, add semantic checks that compare a claim with the cited implementat
 - Small, mixed cohorts can reveal mechanisms, but they rarely justify broad defaults.
 - A plan becomes implementation-ready only when its claims survive structural, grounding, and semantic scrutiny.
 
-The companion piece, [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops/), turns those gates into a reusable measurement framework.
+The companion piece, [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops), turns those gates into a reusable measurement framework.

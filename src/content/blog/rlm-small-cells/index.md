@@ -1,6 +1,6 @@
 ---
 title: "When Smaller Cells Make Agents Worse"
-publishDate: "2026-07-09"
+publishDate: "2026-06-05"
 description: "Smaller cells cut cells/turn but can exhaust step budgets; match policy to horizon, not aesthetics."
 heroImage:
   src: "./cover.png"

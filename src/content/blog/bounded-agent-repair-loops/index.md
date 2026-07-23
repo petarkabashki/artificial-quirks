@@ -1,8 +1,8 @@
 ---
 title: "Designing Bounded Repair Loops for Agent Plans"
 description: "A bounded repair action makes plan validation observable and safe, but repair telemetry must be tied to the final outcome rather than counted as success by i..."
-publishDate: "2026-05-21"
-updatedDate: "2026-05-21"
+publishDate: "2026-05-09"
+updatedDate: "2026-05-09"
 tags:
   - agent-systems
   - repair-loops
@@ -85,4 +85,4 @@ Until that exists, one bounded action is a useful safety default because it make
 - Make error categories select a narrow evidence action.
 - Use deterministic branch-forcing benchmarks before attributing a later cohort's success to a repair prompt.
 
-For the measurement framework around these loops, read [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops/).
+For the measurement framework around these loops, read [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops).

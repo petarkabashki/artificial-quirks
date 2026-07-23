@@ -1,8 +1,8 @@
 ---
 title: "Why Build an Agent Harness?"
 description: "An agent harness turns coding-agent activity into a bounded, inspectable, and repeatable engineering process rather than a stream of opaque terminal outcomes."
-publishDate: "2026-04-30"
-updatedDate: "2026-04-30"
+publishDate: "2026-05-06"
+updatedDate: "2026-05-06"
 tags:
   - agent-systems
   - software-engineering
@@ -70,12 +70,12 @@ It is also not a substitute for engineers. The desired division of labor is deli
 
 This opening article provides the frame. The rest of the series investigates the individual controls and the evidence needed to evaluate them:
 
-- [Experiments Should Be First-Class Product Artifacts](/blog/experiments-as-product-artifacts/) explains the artifact chain behind reproducible conclusions.
-- [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops/) defines a scorecard spanning completion, verification, grounding, repair, and cost.
-- [A Plan Can Validate and Still Be Unsafe to Implement](/blog/agent-plans-semantic-proof/) shows why structural checks need semantic review.
-- [Grounding Is Necessary, Not Sufficient](/blog/grounding-is-not-semantic-proof/) separates file existence from claim correctness.
-- [Designing Bounded Repair Loops for Agent Plans](/blog/bounded-agent-repair-loops/) turns a repair attempt into an observable control loop.
-- [What a Two-for-Two Agent Result Actually Proves](/blog/interpreting-two-two-agent-results/) provides the language for interpreting small cohorts honestly.
+- [Experiments Should Be First-Class Product Artifacts](/blog/experiments-as-product-artifacts) explains the artifact chain behind reproducible conclusions.
+- [Benchmarking Agent Systems Beyond “Did It Finish?”](/blog/benchmarking-agent-repair-loops) defines a scorecard spanning completion, verification, grounding, repair, and cost.
+- [A Plan Can Validate and Still Be Unsafe to Implement](/blog/agent-plans-semantic-proof) shows why structural checks need semantic review.
+- [Grounding Is Necessary, Not Sufficient](/blog/grounding-is-not-semantic-proof) separates file existence from claim correctness.
+- [Designing Bounded Repair Loops for Agent Plans](/blog/bounded-agent-repair-loops) turns a repair attempt into an observable control loop.
+- [What a Two-for-Two Agent Result Actually Proves](/blog/interpreting-two-two-agent-results) provides the language for interpreting small cohorts honestly.
 
 ## The standard to hold it to
 

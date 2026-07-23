@@ -1,8 +1,8 @@
 ---
 title: "What a Two-for-Two Agent Result Actually Proves"
 description: "A 2/2 completion result is useful evidence of a cohort outcome; it is not automatically proof of a mechanism or a production default."
-publishDate: "2026-06-22"
-updatedDate: "2026-06-22"
+publishDate: "2026-07-01"
+updatedDate: "2026-07-01"
 tags:
   - agent-systems
   - experiments
@@ -87,4 +87,4 @@ That experiment would not make the whole planner reliable. It would transform th
 - State confounders next to the headline, not in a footnote.
 - Use small cohorts to choose the next discriminating experiment.
 
-For the repair-loop design behind this example, see [Designing Bounded Repair Loops for Agent Plans](/blog/bounded-agent-repair-loops/).
+For the repair-loop design behind this example, see [Designing Bounded Repair Loops for Agent Plans](/blog/bounded-agent-repair-loops).

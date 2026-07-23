@@ -1,8 +1,8 @@
 ---
-title: "Zero Net Access: Hardening LLM Agent Sandboxes with UDS Transport and Signed Audit Trails"
-description: "An in-depth analysis of securing autonomous LLM agents using host-only network isolation, Unix Domain Socket proxies, and cryptographically signed audit logs."
-publishDate: "2026-07-23"
-updatedDate: "2026-07-23"
+title: "Zero Net Access: Hardening LLM Agent Sandboxes"
+description: "Securing autonomous LLM agents with host-only network isolation, UDS proxies, and cryptographically signed audit logs."
+publishDate: "2026-05-17"
+updatedDate: "2026-05-17"
 tags:
   - security
   - sandboxing
@@ -10,11 +10,14 @@ tags:
   - audit-logging
 draft: false
 comment: true
+heroImage:
+  src: "./assets/cover.png"
+  alt: "Digital vault representing an isolated sandbox"
 ---
 
-When autonomous LLM agents execute arbitrary code, shell commands, or refactoring loops on a host system, security cannot rely on soft prompt instructions. Without strict container-level boundaries, an unconstrained agent trajectory can accidentally leak secrets, alter host configurations, or make unauthorized external network connections.
+Imagine inviting a highly capable assistant into your office to organize your files, only to find they've accidentally emailed your private documents to the internet. This is the risk we face when giving autonomous AI agents—like those writing code or managing systems—free reign on a computer. Security cannot rely merely on politely asking the AI to "behave" through prompt instructions. Without strict, physical-like boundaries, an unconstrained agent can accidentally leak secrets, alter critical configurations, or make unauthorized connections to the outside world.
 
-In this article, we detail the implementation and empirical validation of a **Zero Net Access** sandbox architecture engineered for `orbit-harness`.
+In this article, we break down how we solved this problem for our orchestration framework by building a **Zero Net Access** sandbox—a digital vault that completely cuts off the AI from the internet while still allowing it to do its job securely.
 
 ---
 
@@ -34,7 +37,7 @@ To mitigate all three vectors, our sandbox enforces three non-negotiable archite
 
 ## Architecture & Control Flow
 
-The host control plane (`orbit-harness`) initializes an ephemeral Docker container for each agent trajectory. Network adapters (`eth0`) are completely disabled at container creation time.
+The host control plane (our orchestration framework) initializes an ephemeral Docker container for each agent trajectory. Network adapters (`eth0`) are completely disabled at container creation time.
 
 ![Sandbox Architecture](./assets/sandbox-architecture.svg)
 
